@@ -1,18 +1,31 @@
 import { useState } from "react";
 import PasswordIcon from "../icons/passwordIcon";
-import axios from 'axios';
+import axios from "axios";
 
 function Login() {
-  const [user , setUser] = useState({email : "" , password: ""});
+  const [user, setUser] = useState({ email: "", password: "" });
   console.log(user);
-
-
+  const [errorMessage, setErrorMessage] = useState("");
+  
   function handleInputField(e) {
     const { name, value } = e.target;
+
     console.log(name);
     console.log(value);
 
-    setUser({...user , [name]: value})
+    if (user.email && user.password) {
+      axios
+        .post("http://url/user/login", user)
+        .then((results) => {
+          Login(results.data.token);
+          setUser(results.data);
+          window.location.replace("/");
+        })
+        .catch((error) => {
+          setErrorMessage(error.response.data.errors);
+          setUser({ ...user, [name]: value });
+        });
+    }
   }
 
   return (

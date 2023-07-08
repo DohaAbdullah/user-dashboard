@@ -2,7 +2,7 @@ import React from "react";
 import data from "../data.json";
 import axios from 'axios';
 
-console.log(data);
+// console.log(data);
 function Dashboard() {
   return (
     <React.Fragment>
