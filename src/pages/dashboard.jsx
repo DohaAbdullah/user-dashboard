@@ -7,7 +7,7 @@ function Dashboard() {
   return (
     <React.Fragment>
     <div className="flex items-center justify-center">
-      <div className="grid lg:grid-cols-6 md:grid-cols-3 sm:grid-cols-3 max-w-[1200px] w-11/12 bg-paraghraph text-headline py-3 text-center ">
+      <div className="grid lg:grid-cols-6 md:grid-cols-3 sm:grid-cols-3 max-w-[1200px] w-11/12 bg-paragraph text-headline  text-center ">
         <div className="bg-main">FirstName</div>
         <div className="bg-main">LastName</div>
         <div className="bg-main">Email</div>

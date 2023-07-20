@@ -1,32 +1,105 @@
 import axios from "axios";
 import React, { useState } from "react";
+import FormData from "../components/formData";
 
 function SignUp() {
-  const [formData, setFormData] = useState({
+  const [user, setUser] = useState({
     username: "",
-    email: "",
     password: "",
-    checkpassword: "",
+    confirmPassword: "",
   });
 
-  const { username, email, password, checkpassword } = formData;
+  const [inputError, setInputError] = useState({
+    username: { isValid: true, errorMessage: "Please choose a username." },
+    password: { isValid: true, errorMessage: "Please choose a password." },
+    confirmPassword: {
+      isValid: true,
+      errorMessage: "Please choose a password.",
+    },
+  });
 
-  const handleFormData = (e) => {
+  const { username, password, confirmPassword } = user;
+
+  const inputs = [
+    {
+      id: 1,
+      name: "username",
+      placeholder: "username",
+      type: "text",
+      label: "Username",
+      errorMessage: inputError.username.errorMessage,
+      pattern: "^[A-Za-z0-9]{3,16}$",
+      required: true,
+      isValid: inputError.username.isValid,
+    },
+    {
+      id: 2,
+      name: "password",
+      placeholder: "password",
+      type: "password",
+      label: "Password",
+      errorMessage: inputError.password.errorMessage,
+      pattern: "/^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/",
+      required: true,
+      isValid: inputError.password.isValid,
+    },
+    {
+      id: 3,
+      name: "confirmPassword",
+      placeholder: "confirm password",
+      type: "password",
+      label: "Confirm Password",
+      errorMessage: inputError.confirmPassword.errorMessage,
+      pattern: user.password,
+      required: true,
+      isValid: inputError.confirmPassword.isValid,
+    },
+  ];
+
+  const onChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-    console.log(formData);
+    setUser({ ...user, [name]: value });
+    setInputError({...inputError, [name]: {...inputError[name] , isValid: true}});
+    // console.log(inputError);
   };
 
-  const handleOnSubmit = (e) => {
+  // const handleFormData = (e) => {
+  //   const { name, value } = e.target;
+  //   setUser({ ...user, [name]: value });
+
+  // };
+
+  const handleOnSubmit = (e) => { 
     e.preventDefault();
-    setFormData({ name: "", email: "", password: "" });
   };
 
-  const handleOnClick = (e) =>{
-    if(username & email & password & checkpassword){
-        axios.send("http" , user)
+  const handleOnClick = (e) => {
+    if (username & password & confirmPassword) {
+      axios
+        .send("http", user)
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
-  }
+
+    setInputError({
+      username: {
+        ...inputError.username,
+        isValid: !user.username ? false : true,
+      },
+      password: {
+        ...inputError.password,
+        isValid: !user.password ? false : true,
+      },
+      confirmPassword: {
+        ...inputError.confirmPassword,
+        isValid: !user.confirmPassword ? false : true,
+      },
+    });
+  };
 
   return (
     <React.Fragment>
@@ -39,68 +112,16 @@ function SignUp() {
             <div className="header block text-gray-700 text-md text-center font-bold mb-2">
               <h1>Create Account</h1>
             </div>
-            <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2">
-                Username
-              </label>
-              <input
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                id="username"
-                type="text"
-                placeholder="Username"
-                name="username"
-                value={username}
-                onChange={handleFormData}
+
+            {inputs.map((input) => (
+              <FormData
+                key={input.id}
+                {...input}
+                value={user[input.name]}
+                onChange={onChange}
               />
-            </div>
-            <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2">
-                Email
-              </label>
-              <input
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                id="Email"
-                type="text"
-                placeholder="Email"
-                name="email"
-                value={email}
-                onChange={handleFormData}
-              />
-            </div>
-            <div className="mb-6">
-              <label className="block text-gray-700 text-sm font-bold mb-2">
-                Password
-              </label>
-              <input
-                className="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
-                id="password"
-                type="password"
-                placeholder="******************"
-                name="password"
-                value={password}
-                onChange={handleFormData}
-              />
-              <p className="text-red-500 text-xs italic">
-                Please choose a password.
-              </p>
-            </div>
-            <div className="mb-6">
-              <label className="block text-gray-700 text-sm font-bold mb-2">
-                Check Password
-              </label>
-              <input
-                className="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
-                id="check password"
-                type="check password"
-                placeholder="******************"
-                name="checkpassword"
-                value={checkpassword}
-                onChange={handleFormData}
-              />
-              <p className="text-red-500 text-xs italic">
-                Please choose a password.
-              </p>
-            </div>
+            ))}
+
             <div className="flex items-center justify-between">
               <button
                 className="bg-button hover:bg-secondary text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
@@ -111,7 +132,7 @@ function SignUp() {
               </button>
               <a
                 className="inline-block align-baseline font-bold text-sm text-headline hover:text-secondary"
-                href="#"
+                href="/"
               >
                 Forgot Password?
               </a>
