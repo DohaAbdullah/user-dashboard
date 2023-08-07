@@ -2,6 +2,8 @@ import axios from "axios";
 import React, { useState } from "react";
 import FormData from "../components/formData";
 
+const api = axios.create({ baseUrl: "http://localhost:3000/" });
+
 function SignUp() {
   const [user, setUser] = useState({
     username: "",
@@ -59,7 +61,10 @@ function SignUp() {
   const onChange = (e) => {
     const { name, value } = e.target;
     setUser({ ...user, [name]: value });
-    setInputError({...inputError, [name]: {...inputError[name] , isValid: true}});
+    setInputError({
+      ...inputError,
+      [name]: { ...inputError[name], isValid: true },
+    });
     // console.log(inputError);
   };
 
@@ -69,14 +74,14 @@ function SignUp() {
 
   // };
 
-  const handleOnSubmit = (e) => { 
+  const handleOnSubmit = (e) => {
     e.preventDefault();
   };
 
   const handleOnClick = (e) => {
     if (username & password & confirmPassword) {
       axios
-        .send("http", user)
+        .post("http", user)
         .then((res) => {
           console.log(res);
         })
@@ -128,14 +133,8 @@ function SignUp() {
                 type="button"
                 onClick={handleOnClick}
               >
-                Sign In
+                Sign Up
               </button>
-              <a
-                className="inline-block align-baseline font-bold text-sm text-headline hover:text-secondary"
-                href="/"
-              >
-                Forgot Password?
-              </a>
             </div>
           </form>
           <p className="text-center text-gray-500 text-xs">

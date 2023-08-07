@@ -10,7 +10,7 @@ function FormData(props) {
         {label}
       </label>
       <input
-        className={`shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline ${props.className}`}
+        className={`shadow appearance-none border border-tertiary focus:border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline ${props.className}`}
         {...inputProps}
         onChange={props.onChange}
       />
